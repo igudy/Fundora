@@ -14,6 +14,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ConfirmDetailsScreen } from './screens/ConfirmDetailsScreen';
 import { CreateAccountScreen } from './screens/CreateAccountScreen';
+import { HomeScreen } from './screens/HomeScreen';
+import { ProfileSetupScreen } from './screens/ProfileSetupScreen';
 import { SplashScreen as AppSplashScreen } from './screens/SplashScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
@@ -21,7 +23,7 @@ import './global.css';
 
 SplashScreen.preventAutoHideAsync();
 
-type Screen = 'welcome' | 'createAccount' | 'confirmDetails' | 'login';
+type Screen = 'welcome' | 'createAccount' | 'confirmDetails' | 'profileSetup' | 'home' | 'login';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
@@ -46,12 +48,21 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
+      case 'home':
+        return <HomeScreen />;
+      case 'profileSetup':
+        return (
+          <ProfileSetupScreen
+            onBack={() => setCurrentScreen('confirmDetails')}
+            onContinue={() => setCurrentScreen('home')}
+          />
+        );
       case 'confirmDetails':
         return (
           <ConfirmDetailsScreen
             phoneNumber={phoneNumber}
             onBack={() => setCurrentScreen('createAccount')}
-            onContinue={(code) => console.log('OTP code:', code)}
+            onContinue={() => setCurrentScreen('profileSetup')}
           />
         );
       case 'createAccount':
@@ -62,7 +73,7 @@ export default function App() {
               setPhoneNumber(phone);
               setCurrentScreen('confirmDetails');
             }}
-            onGoogleSignUp={() => console.log('Google sign up')}
+            onGoogleSignUp={() => setCurrentScreen('home')}
             onSignIn={() => setCurrentScreen('login')}
           />
         );
@@ -71,7 +82,7 @@ export default function App() {
         return (
           <WelcomeScreen
             onCreateAccount={() => setCurrentScreen('createAccount')}
-            onLogin={() => setCurrentScreen('login')}
+            onLogin={() => setCurrentScreen('home')}
           />
         );
     }
@@ -81,7 +92,7 @@ export default function App() {
     <SafeAreaProvider>
       <View className="flex-1">
         {renderScreen()}
-        <StatusBar style={currentScreen === 'welcome' ? 'light' : 'dark'} />
+        <StatusBar style={currentScreen === 'welcome' || currentScreen === 'home' ? 'light' : 'dark'} />
       </View>
     </SafeAreaProvider>
   );
