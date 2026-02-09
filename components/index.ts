@@ -1,3 +1,4 @@
+export * from './AddMoneyModal';
 export * from './Avatar';
 export * from './AvatarGroup';
 export * from './AvatarImage';

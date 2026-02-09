@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AddMoneyModal } from '../components/AddMoneyModal';
 import { AvatarImage } from '../components/AvatarImage';
 import { BottomTabBar, TabName } from '../components/BottomTabBar';
 import { DueItem } from '../components/DueItem';
@@ -24,6 +25,7 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScre
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabName>('home');
   const [showBalance, setShowBalance] = useState(true);
+  const [showAddMoney, setShowAddMoney] = useState(false);
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -165,7 +167,8 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScre
             <TouchableOpacity
               className="flex-row items-center rounded-md px-5 py-3"
               style={{ backgroundColor: '#D1E76F' }}
-              activeOpacity={0.8}>
+              activeOpacity={0.8}
+              onPress={() => setShowAddMoney(true)}>
               <MoneyIcon width={20} height={18} color="#024E44" />
               <Text className="ml-2 font-jakarta-semibold text-sm text-primary-dark">
                 Add money
@@ -211,6 +214,8 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScre
 
         <BottomTabBar activeTab={activeTab} onTabPress={setActiveTab} />
       </View>
+
+      <AddMoneyModal visible={showAddMoney} onClose={() => setShowAddMoney(false)} />
     </View>
   );
 }
