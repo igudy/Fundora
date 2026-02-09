@@ -82,7 +82,16 @@ export default function App() {
           />
         );
       case 'myGroups':
-        return <MyGroupsScreen onBack={() => setCurrentScreen('home')} />;
+        return (
+          <MyGroupsScreen
+            onBack={() => setCurrentScreen('home')}
+            onTabPress={(tab) => {
+              if (tab === 'home') setCurrentScreen('home');
+              else if (tab === 'transaction') setCurrentScreen('transactions');
+              else if (tab === 'profile') setCurrentScreen('profile');
+            }}
+          />
+        );
       case 'bankTransfer':
         return <BankTransferScreen onBack={() => setCurrentScreen('home')} />;
       case 'upcomingDues':

@@ -1,7 +1,8 @@
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Rect } from 'react-native-svg';
 
+import { AvatarImage } from '../components/AvatarImage';
 import { BottomTabBar, TabName } from '../components/BottomTabBar';
 
 function PersonIcon({ size = 22, color = '#024E44' }: { size?: number; color?: string }) {
@@ -155,40 +156,25 @@ export function ProfileScreen({
         style={{ height: insets.top }}
       />
 
+      {/* Green Header - fixed */}
+      <View
+        className="items-center overflow-hidden bg-primary-dark"
+        style={{
+          paddingTop: insets.top + 24,
+          paddingBottom: 36,
+          borderBottomLeftRadius: 32,
+          borderBottomRightRadius: 32,
+        }}>
+        {/* Avatar */}
+        <AvatarImage size={110} />
+
+        <Text className="mt-4 font-jakarta-bold text-2xl text-white">{userName}</Text>
+        <Text className="mt-1 font-jakarta text-sm" style={{ color: '#D1E76F' }}>
+          {email}
+        </Text>
+      </View>
+
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Green Header */}
-        <View
-          className="items-center overflow-hidden bg-primary-dark"
-          style={{
-            paddingTop: insets.top + 24,
-            paddingBottom: 36,
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
-          }}>
-          {/* Avatar */}
-          <View
-            style={{
-              width: 110,
-              height: 110,
-              borderRadius: 55,
-              borderWidth: 3,
-              borderColor: '#D1E76F',
-              justifyContent: 'center',
-              alignItems: 'center',
-              overflow: 'hidden',
-            }}>
-            <Image
-              source={{ uri: 'https://i.pravatar.cc/200?img=68' }}
-              style={{ width: 104, height: 104, borderRadius: 52 }}
-            />
-          </View>
-
-          <Text className="mt-4 font-jakarta-bold text-2xl text-white">{userName}</Text>
-          <Text className="mt-1 font-jakarta text-sm" style={{ color: '#D1E76F' }}>
-            {email}
-          </Text>
-        </View>
-
         {/* Menu Items */}
         <View className="px-5" style={{ paddingTop: 24, paddingBottom: insets.bottom + 100 }}>
           {menuItems.map((item) => {

@@ -1,12 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
-import { View, Text, PanResponder, LogBox, Pressable, Platform } from 'react-native';
+import { useRef, useState } from 'react';
+import { View, Text, PanResponder, LogBox, Pressable } from 'react-native';
 import { GLView } from 'expo-gl';
 import { Renderer, loadTextureAsync } from 'expo-three';
 import { Asset } from 'expo-asset';
+import * as Device from 'expo-device';
 import * as THREE from 'three';
 import Svg, { Path } from 'react-native-svg';
 // @ts-ignore - three.js examples don't ship type declarations
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Card3DWebView } from './Card3DWebView';
+
+// expo-device: isDevice is false on simulators/emulators
+const IS_SIMULATOR = !Device.isDevice;
 
 // Suppress non-critical warnings (LogBox covers on-screen banners)
 LogBox.ignoreLogs([
@@ -157,19 +162,6 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [glUnavailable, setGlUnavailable] = useState(false);
-  const glReadyRef = useRef(false);
-
-  // Detect if GL never initializes (iOS Simulator / unsupported platforms)
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!glReadyRef.current) {
-        setGlUnavailable(true);
-        setLoading(false);
-      }
-    }, 5000);
-    return () => clearTimeout(timeout);
-  }, []);
   const rotationRef = useRef({ x: 0, y: 0 });
   const targetRef = useRef<{ x: number; y: number } | null>(null);
   const velocityRef = useRef({ x: 0, y: 0 });
@@ -247,7 +239,6 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
   ).current;
 
   const onContextCreate = async (gl: any) => {
-    glReadyRef.current = true;
     try {
       const renderer = new Renderer({ gl });
       renderer.setSize(gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -384,6 +375,11 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
     }
   };
 
+  // Simulator: use WebView-based three.js (native GL doesn't render on simulator)
+  if (IS_SIMULATOR) {
+    return <Card3DWebView height={height} />;
+  }
+
   return (
     <View style={{ alignItems: 'center' }}>
       <View
@@ -433,7 +429,7 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
           </View>
         )}
 
-        {(error || glUnavailable) && (
+        {error && (
           <View
             style={{
               position: 'absolute',
@@ -448,22 +444,14 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
             }}>
             <Rotate3DIcon size={32} />
             <Text className="mt-3 font-jakarta-medium text-sm text-gray-500">
-              {glUnavailable
-                ? '3D preview requires a physical device'
-                : 'Could not load model'}
+              Could not load 3D model
             </Text>
-            {glUnavailable && (
-              <Text className="mt-1 text-center font-jakarta text-xs text-gray-400">
-                The {Platform.OS} simulator does not support OpenGL rendering
-              </Text>
-            )}
           </View>
         )}
       </View>
 
       {/* Controls */}
       <View className="mt-4 flex-row items-center justify-center" style={{ gap: 12 }}>
-        {/* Zoom out */}
         <Pressable
           onPress={() => zoomBy(1)}
           style={{
@@ -477,7 +465,6 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
           <ZoomIcon type="out" />
         </Pressable>
 
-        {/* Left — rotate 90° left */}
         <Pressable
           onPress={() => rotateBy(-Math.PI / 2)}
           style={{
@@ -491,7 +478,6 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
           <ArrowIcon direction="left" />
         </Pressable>
 
-        {/* Flip — rotate 180° from current position */}
         <Pressable
           onPress={() => rotateBy(Math.PI)}
           style={{
@@ -505,7 +491,6 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
           <ArrowIcon direction="flip" />
         </Pressable>
 
-        {/* Right — rotate 90° right from current position */}
         <Pressable
           onPress={() => rotateBy(Math.PI / 2)}
           style={{
@@ -519,7 +504,6 @@ export function Card3DView({ height = 320 }: Card3DViewProps) {
           <ArrowIcon direction="right" />
         </Pressable>
 
-        {/* Zoom in */}
         <Pressable
           onPress={() => zoomBy(-1)}
           style={{

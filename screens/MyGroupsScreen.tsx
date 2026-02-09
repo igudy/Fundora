@@ -3,6 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
 import { AvatarGroup } from '../components/AvatarGroup';
+import { BottomTabBar, TabName } from '../components/BottomTabBar';
 import { ArrowLeftIcon } from '../components/icons';
 
 function PlusIcon({ size = 16, color = '#024E44' }: { size?: number; color?: string }) {
@@ -226,9 +227,10 @@ function GroupCard({ group }: { group: GroupData }) {
 
 interface MyGroupsScreenProps {
   onBack: () => void;
+  onTabPress?: (tab: TabName) => void;
 }
 
-export function MyGroupsScreen({ onBack }: MyGroupsScreenProps) {
+export function MyGroupsScreen({ onBack, onTabPress }: MyGroupsScreenProps) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -274,10 +276,22 @@ export function MyGroupsScreen({ onBack }: MyGroupsScreenProps) {
         contentContainerStyle={{
           paddingHorizontal: 20,
           paddingTop: 20,
-          paddingBottom: insets.bottom + 24,
+          paddingBottom: insets.bottom + 100,
         }}
         showsVerticalScrollIndicator={false}
       />
+
+      {/* Bottom Tab Bar */}
+      <View className="absolute bottom-0 left-0 right-0 bg-white">
+        <BottomTabBar
+          activeTab="group"
+          onTabPress={(tab) => {
+            if (tab !== 'group') {
+              onTabPress?.(tab);
+            }
+          }}
+        />
+      </View>
     </View>
   );
 }
