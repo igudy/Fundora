@@ -1,5 +1,6 @@
 export * from './Avatar';
 export * from './AvatarGroup';
+export * from './AvatarImage';
 export * from './BigLogo';
 export * from './BottomTabBar';
 export * from './Button';

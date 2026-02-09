@@ -21,25 +21,23 @@ export function DueItem({ initials, title, date, amount, members = [], onPress }
   };
 
   return (
-    <TouchableOpacity
-      className="flex-row items-center py-4"
-      onPress={onPress}
-      activeOpacity={0.7}>
+    <TouchableOpacity className="flex-row items-center py-4" onPress={onPress} activeOpacity={0.7}>
       {/* Avatar */}
-      <Avatar size={48} initials={initials} backgroundColor="#90C841" textColor="#024E44" />
+      <Avatar size={48} initials={initials} backgroundColor="#E9FFC9" textColor="#024E44" />
 
       {/* Title and Date */}
       <View className="ml-3 flex-1">
-        <Text className="font-jakarta-semibold text-base text-gray-900">{title}</Text>
+        <Text className="font-jakarta-medium text-base text-[#23262F]">{title}</Text>
         <Text className="font-jakarta text-sm text-gray-500">{date}</Text>
       </View>
 
       {/* Amount and Members */}
       <View className="items-end">
-        <Text className="font-jakarta-bold text-base text-gray-900">₦{formatAmount(amount)}</Text>
+        <Text className="font-jakarta-medium text-base">₦{formatAmount(amount)}</Text>
         {members.length > 0 && (
           <View className="mt-1">
             <AvatarGroup avatars={members} maxDisplay={3} size={20} />
+            jj
           </View>
         )}
       </View>

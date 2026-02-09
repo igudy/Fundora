@@ -1,17 +1,9 @@
-import {
-  useFonts,
-  PlusJakartaSans_400Regular,
-  PlusJakartaSans_500Medium,
-  PlusJakartaSans_600SemiBold,
-  PlusJakartaSans_700Bold,
-  PlusJakartaSans_800ExtraBold,
-} from '@expo-google-fonts/plus-jakarta-sans';
+import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import { ConfirmDetailsScreen } from './screens/ConfirmDetailsScreen';
 import { CreateAccountScreen } from './screens/CreateAccountScreen';
 import { HomeScreen } from './screens/HomeScreen';
@@ -26,14 +18,15 @@ SplashScreen.preventAutoHideAsync();
 type Screen = 'welcome' | 'createAccount' | 'confirmDetails' | 'profileSetup' | 'home' | 'login';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
+  // TODO: Change back to 'welcome' when done working on home screen
+  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [fontsLoaded, fontError] = useFonts({
-    PlusJakartaSans_400Regular,
-    PlusJakartaSans_500Medium,
-    PlusJakartaSans_600SemiBold,
-    PlusJakartaSans_700Bold,
-    PlusJakartaSans_800ExtraBold,
+    'PlusJakartaSans-Regular': require('./assets/fonts/PlusJakartaSans-Regular.ttf'),
+    'PlusJakartaSans-Medium': require('./assets/fonts/PlusJakartaSans-Medium.ttf'),
+    'PlusJakartaSans-SemiBold': require('./assets/fonts/PlusJakartaSans-SemiBold.ttf'),
+    'PlusJakartaSans-Bold': require('./assets/fonts/PlusJakartaSans-Bold.ttf'),
+    'PlusJakartaSans-ExtraBold': require('./assets/fonts/PlusJakartaSans-ExtraBold.ttf'),
   });
 
   useEffect(() => {
@@ -92,7 +85,9 @@ export default function App() {
     <SafeAreaProvider>
       <View className="flex-1">
         {renderScreen()}
-        <StatusBar style={currentScreen === 'welcome' || currentScreen === 'home' ? 'light' : 'dark'} />
+        <StatusBar
+          style={currentScreen === 'welcome' || currentScreen === 'home' ? 'light' : 'dark'}
+        />
       </View>
     </SafeAreaProvider>
   );

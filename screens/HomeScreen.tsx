@@ -1,29 +1,26 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path, Circle } from 'react-native-svg';
 
-import { Avatar } from '../components/Avatar';
+import { AvatarImage } from '../components/AvatarImage';
 import { BottomTabBar, TabName } from '../components/BottomTabBar';
 import { DueItem } from '../components/DueItem';
 import {
-  NotificationIcon,
+  BottomSectionDecor,
   EyeIcon,
-  AddMoneyIcon,
-  SendMoneyIcon,
+  EyeOffIcon,
+  MoneyIcon,
+  NotifBellIcon,
+  SendMoneyIconAlt,
+  TopSectionDecor,
 } from '../components/icons';
 
 interface HomeScreenProps {
   userName?: string;
-  userImage?: string;
   balance?: number;
 }
 
-export function HomeScreen({
-  userName = 'Olamide',
-  userImage = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-  balance = 3000.05,
-}: HomeScreenProps) {
+export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabName>('home');
   const [showBalance, setShowBalance] = useState(true);
@@ -36,10 +33,7 @@ export function HomeScreen({
   };
 
   const formatBalance = (value: number) => {
-    return value.toLocaleString('en-NG', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    return value.toFixed(2);
   };
 
   const upcomingDues = [
@@ -111,64 +105,79 @@ export function HomeScreen({
 
   return (
     <View className="flex-1 bg-white">
-      {/* Header Section with Green Background */}
-      <View className="bg-primary-dark" style={{ paddingTop: insets.top }}>
-        {/* Decorative Background Shapes */}
-        <View className="absolute right-0 top-0 opacity-20">
-          <Svg width={200} height={200} viewBox="0 0 200 200">
-            <Circle cx="180" cy="20" r="80" fill="#98B80B" />
-            <Path d="M100 100 Q150 50 200 100 Q150 150 100 100" fill="#98B80B" />
-          </Svg>
+      {/* Green status bar background */}
+      <View
+        className="absolute left-0 right-0 top-0 bg-primary-dark"
+        style={{ height: insets.top }}
+      />
+
+      <View
+        className="overflow-hidden bg-primary-dark"
+        style={{
+          paddingTop: insets.top,
+          borderBottomLeftRadius: 32,
+          borderBottomRightRadius: 32,
+        }}>
+        <View className="absolute right-0 top-0 opacity-30">
+          <TopSectionDecor width={175} height={127} />
+        </View>
+
+        <View className="absolute bottom-0 left-0 opacity-30">
+          <BottomSectionDecor width={109} height={165} />
         </View>
 
         {/* Top Bar */}
-        <View className="flex-row items-center justify-between px-5 py-4">
+        <View className="flex-row items-center justify-between px-5 py-6">
           <View className="flex-row items-center">
-            <Image
-              source={{ uri: userImage }}
-              className="h-12 w-12 rounded-full"
-            />
+            <AvatarImage size={48} />
             <View className="ml-3">
-              <Text className="font-jakarta text-sm text-white/70">{getGreeting()},</Text>
+              <Text className="font-jakarta text-sm" style={{ color: '#D1E76F' }}>
+                {getGreeting()},
+              </Text>
               <Text className="font-jakarta-bold text-lg text-white">{userName}</Text>
             </View>
           </View>
 
-          <TouchableOpacity
-            className="h-10 w-10 items-center justify-center rounded-full bg-white/20">
-            <NotificationIcon size={20} color="#FFFFFF" />
+          <TouchableOpacity>
+            <NotifBellIcon size={40} />
           </TouchableOpacity>
         </View>
 
-        {/* Balance Section */}
-        <View className="items-center px-5 pb-6 pt-4">
+        <View className="items-center px-5 pb-12 pt-8">
           <TouchableOpacity
             className="mb-2 flex-row items-center"
             onPress={() => setShowBalance(!showBalance)}>
-            <Text className="font-jakarta mr-2 text-sm text-primary-main">Available Balance</Text>
-            <EyeIcon size={16} color="#D1E76F" />
+            <Text className="mr-2 font-jakarta text-sm" style={{ color: '#D1E76F' }}>
+              Available Balance
+            </Text>
+            {showBalance ? (
+              <EyeIcon size={16} color="#D1E76F" />
+            ) : (
+              <EyeOffIcon size={16} color="#D1E76F" />
+            )}
           </TouchableOpacity>
 
-          <Text className="font-jakarta-bold text-5xl text-white">
+          <Text className="font-jakarta-semibold text-5xl leading-none text-white">
             ₦{showBalance ? formatBalance(balance) : '••••••'}
           </Text>
 
-          {/* Action Buttons */}
           <View className="mt-6 flex-row gap-4">
             <TouchableOpacity
-              className="flex-row items-center rounded-full bg-primary-main px-5 py-3"
+              className="flex-row items-center rounded-md px-5 py-3"
+              style={{ backgroundColor: '#D1E76F' }}
               activeOpacity={0.8}>
-              <AddMoneyIcon size={18} color="#024E44" />
-              <Text className="font-jakarta-semibold ml-2 text-sm text-primary-dark">
+              <MoneyIcon width={20} height={18} color="#024E44" />
+              <Text className="ml-2 font-jakarta-semibold text-sm text-primary-dark">
                 Add money
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              className="flex-row items-center rounded-full bg-primary-main px-5 py-3"
+              className="flex-row items-center rounded-md px-5 py-3"
+              style={{ backgroundColor: '#D1E76F' }}
               activeOpacity={0.8}>
-              <SendMoneyIcon size={18} color="#024E44" />
-              <Text className="font-jakarta-semibold ml-2 text-sm text-primary-dark">
+              <SendMoneyIconAlt width={20} height={18} />
+              <Text className="ml-2 font-jakarta-semibold text-sm text-primary-dark">
                 Send money
               </Text>
             </TouchableOpacity>
@@ -176,17 +185,16 @@ export function HomeScreen({
         </View>
       </View>
 
-      {/* White Content Section */}
       <View className="flex-1 bg-white">
-        {/* Upcoming Dues Header */}
         <View className="flex-row items-center justify-between px-5 pb-2 pt-6">
-          <Text className="font-jakarta-bold text-lg text-gray-900">Upcoming Dues</Text>
+          <Text className="font-jakarta-medium text-lg text-[#024E44]">Upcoming Dues</Text>
           <TouchableOpacity>
-            <Text className="font-jakarta-semibold text-sm text-gray-500">View all&gt;&gt;&gt;</Text>
+            <Text className="font-jakarta-regular *: text-sm text-[#024E44]">
+              View all&gt;&gt;&gt;
+            </Text>
           </TouchableOpacity>
         </View>
 
-        {/* Dues List */}
         <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
           {upcomingDues.map((due) => (
             <DueItem
@@ -200,10 +208,9 @@ export function HomeScreen({
             />
           ))}
         </ScrollView>
-      </View>
 
-      {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab={activeTab} onTabPress={setActiveTab} />
+        <BottomTabBar activeTab={activeTab} onTabPress={setActiveTab} />
+      </View>
     </View>
   );
 }
