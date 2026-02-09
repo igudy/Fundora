@@ -284,7 +284,15 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05, onNavigate
           ))}
         </ScrollView>
 
-        <BottomTabBar activeTab={activeTab} onTabPress={setActiveTab} />
+        <BottomTabBar
+          activeTab={activeTab}
+          onTabPress={(tab) => {
+            setActiveTab(tab);
+            if (tab === 'group') onNavigate?.('myGroups');
+            else if (tab === 'transaction') onNavigate?.('transactions');
+            else if (tab === 'profile') onNavigate?.('profile');
+          }}
+        />
       </View>
 
       <AddMoneyModal

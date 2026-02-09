@@ -8,9 +8,12 @@ import { CardPaymentScreen } from './screens/CardPaymentScreen';
 import { ConfirmDetailsScreen } from './screens/ConfirmDetailsScreen';
 import { CreateAccountScreen } from './screens/CreateAccountScreen';
 import { HomeScreen } from './screens/HomeScreen';
+import { MyGroupsScreen } from './screens/MyGroupsScreen';
+import { ProfileScreen } from './screens/ProfileScreen';
 import { ProfileSetupScreen } from './screens/ProfileSetupScreen';
 import { BankTransferScreen } from './screens/BankTransferScreen';
 import { SplashScreen as AppSplashScreen } from './screens/SplashScreen';
+import { TransactionScreen } from './screens/TransactionScreen';
 import { UpcomingDuesScreen } from './screens/UpcomingDuesScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
@@ -27,7 +30,10 @@ type Screen =
   | 'login'
   | 'cardPayment'
   | 'upcomingDues'
-  | 'bankTransfer';
+  | 'bankTransfer'
+  | 'myGroups'
+  | 'profile'
+  | 'transactions';
 
 export default function App() {
   // TODO: Change back to 'welcome' when done working on home screen
@@ -53,6 +59,30 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
+      case 'profile':
+        return (
+          <ProfileScreen
+            onBack={() => setCurrentScreen('home')}
+            onTabPress={(tab) => {
+              if (tab === 'home') setCurrentScreen('home');
+              else if (tab === 'group') setCurrentScreen('myGroups');
+              else if (tab === 'transaction') setCurrentScreen('transactions');
+            }}
+          />
+        );
+      case 'transactions':
+        return (
+          <TransactionScreen
+            onBack={() => setCurrentScreen('home')}
+            onTabPress={(tab) => {
+              if (tab === 'home') setCurrentScreen('home');
+              else if (tab === 'group') setCurrentScreen('myGroups');
+              else if (tab === 'profile') setCurrentScreen('profile');
+            }}
+          />
+        );
+      case 'myGroups':
+        return <MyGroupsScreen onBack={() => setCurrentScreen('home')} />;
       case 'bankTransfer':
         return <BankTransferScreen onBack={() => setCurrentScreen('home')} />;
       case 'upcomingDues':
@@ -104,7 +134,7 @@ export default function App() {
       <View className="flex-1">
         {renderScreen()}
         <StatusBar
-          style={currentScreen === 'welcome' || currentScreen === 'home' ? 'light' : 'dark'}
+          style={currentScreen === 'welcome' || currentScreen === 'home' || currentScreen === 'profile' ? 'light' : 'dark'}
         />
       </View>
     </SafeAreaProvider>
