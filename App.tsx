@@ -4,18 +4,30 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CardPaymentScreen } from './screens/CardPaymentScreen';
 import { ConfirmDetailsScreen } from './screens/ConfirmDetailsScreen';
 import { CreateAccountScreen } from './screens/CreateAccountScreen';
 import { HomeScreen } from './screens/HomeScreen';
 import { ProfileSetupScreen } from './screens/ProfileSetupScreen';
+import { BankTransferScreen } from './screens/BankTransferScreen';
 import { SplashScreen as AppSplashScreen } from './screens/SplashScreen';
+import { UpcomingDuesScreen } from './screens/UpcomingDuesScreen';
 import { WelcomeScreen } from './screens/WelcomeScreen';
 
 import './global.css';
 
 SplashScreen.preventAutoHideAsync();
 
-type Screen = 'welcome' | 'createAccount' | 'confirmDetails' | 'profileSetup' | 'home' | 'login';
+type Screen =
+  | 'welcome'
+  | 'createAccount'
+  | 'confirmDetails'
+  | 'profileSetup'
+  | 'home'
+  | 'login'
+  | 'cardPayment'
+  | 'upcomingDues'
+  | 'bankTransfer';
 
 export default function App() {
   // TODO: Change back to 'welcome' when done working on home screen
@@ -41,8 +53,14 @@ export default function App() {
 
   const renderScreen = () => {
     switch (currentScreen) {
+      case 'bankTransfer':
+        return <BankTransferScreen onBack={() => setCurrentScreen('home')} />;
+      case 'upcomingDues':
+        return <UpcomingDuesScreen onBack={() => setCurrentScreen('home')} />;
+      case 'cardPayment':
+        return <CardPaymentScreen onBack={() => setCurrentScreen('home')} />;
       case 'home':
-        return <HomeScreen />;
+        return <HomeScreen onNavigate={(screen: Screen) => setCurrentScreen(screen)} />;
       case 'profileSetup':
         return (
           <ProfileSetupScreen

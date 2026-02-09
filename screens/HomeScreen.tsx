@@ -19,9 +19,10 @@ import {
 interface HomeScreenProps {
   userName?: string;
   balance?: number;
+  onNavigate?: (screen: string) => void;
 }
 
-export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScreenProps) {
+export function HomeScreen({ userName = 'Olamide', balance = 3000.05, onNavigate }: HomeScreenProps) {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabName>('home');
   const [showBalance, setShowBalance] = useState(true);
@@ -67,40 +68,111 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScre
         { imageUrl: 'https://i.pravatar.cc/100?img=6' },
         { initials: 'X' },
         { initials: 'Y' },
-        { initials: 'Z' },
-        { initials: 'W' },
       ],
     },
     {
       id: '3',
-      initials: 'W',
-      title: 'Wagmi',
-      date: '3 Jun, 6:22 PM',
-      amount: 45333.0,
+      initials: 'RB',
+      title: 'Rent & Bills',
+      date: '10 Jun, 12:00 PM',
+      amount: 150000.0,
       members: [
         { imageUrl: 'https://i.pravatar.cc/100?img=7' },
         { imageUrl: 'https://i.pravatar.cc/100?img=8' },
-        { imageUrl: 'https://i.pravatar.cc/100?img=9' },
-        { initials: 'P' },
-        { initials: 'Q' },
-        { initials: 'R' },
-        { initials: 'S' },
+        { initials: 'K' },
       ],
     },
     {
       id: '4',
-      initials: 'W',
-      title: 'Wagmi',
-      date: '3 Jun, 6:22 PM',
-      amount: 45333.0,
+      initials: 'GN',
+      title: 'Game Night Fund',
+      date: '12 Jun, 7:00 PM',
+      amount: 5000.0,
       members: [
+        { imageUrl: 'https://i.pravatar.cc/100?img=9' },
         { imageUrl: 'https://i.pravatar.cc/100?img=10' },
         { imageUrl: 'https://i.pravatar.cc/100?img=11' },
+        { initials: 'T' },
+        { initials: 'U' },
+      ],
+    },
+    {
+      id: '5',
+      initials: 'WD',
+      title: 'Wedding Gift',
+      date: '15 Jun, 2:00 PM',
+      amount: 25000.0,
+      members: [
         { imageUrl: 'https://i.pravatar.cc/100?img=12' },
-        { initials: 'M' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=13' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=14' },
+        { initials: 'F' },
+        { initials: 'G' },
+        { initials: 'H' },
+      ],
+    },
+    {
+      id: '6',
+      initials: 'GY',
+      title: 'Gym Membership',
+      date: '18 Jun, 9:00 AM',
+      amount: 12500.0,
+      members: [
+        { imageUrl: 'https://i.pravatar.cc/100?img=15' },
+        { initials: 'L' },
+      ],
+    },
+    {
+      id: '7',
+      initials: 'BC',
+      title: 'Book Club',
+      date: '20 Jun, 5:00 PM',
+      amount: 3500.0,
+      members: [
+        { imageUrl: 'https://i.pravatar.cc/100?img=16' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=17' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=18' },
+        { initials: 'R' },
+      ],
+    },
+    {
+      id: '8',
+      initials: 'HP',
+      title: 'House Party',
+      date: '22 Jun, 8:00 PM',
+      amount: 18000.0,
+      members: [
+        { imageUrl: 'https://i.pravatar.cc/100?img=19' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=20' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=21' },
         { initials: 'N' },
         { initials: 'O' },
-        { initials: 'L' },
+        { initials: 'P' },
+        { initials: 'Q' },
+      ],
+    },
+    {
+      id: '9',
+      initials: 'VS',
+      title: 'Vacation Savings',
+      date: '25 Jun, 10:00 AM',
+      amount: 75000.0,
+      members: [
+        { imageUrl: 'https://i.pravatar.cc/100?img=22' },
+        { imageUrl: 'https://i.pravatar.cc/100?img=23' },
+        { initials: 'S' },
+        { initials: 'V' },
+      ],
+    },
+    {
+      id: '10',
+      initials: 'EF',
+      title: 'Emergency Fund',
+      date: '28 Jun, 12:00 PM',
+      amount: 50000.0,
+      members: [
+        { imageUrl: 'https://i.pravatar.cc/100?img=24' },
+        { initials: 'M' },
       ],
     },
   ];
@@ -191,9 +263,9 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScre
       <View className="flex-1 bg-white">
         <View className="flex-row items-center justify-between px-5 pb-2 pt-6">
           <Text className="font-jakarta-medium text-lg text-[#024E44]">Upcoming Dues</Text>
-          <TouchableOpacity>
-            <Text className="font-jakarta-regular *: text-sm text-[#024E44]">
-              View all&gt;&gt;&gt;
+          <TouchableOpacity onPress={() => onNavigate?.('upcomingDues')}>
+            <Text className="font-jakarta text-sm text-[#024E44]">
+              View all &gt;&gt;&gt;
             </Text>
           </TouchableOpacity>
         </View>
@@ -215,7 +287,12 @@ export function HomeScreen({ userName = 'Olamide', balance = 3000.05 }: HomeScre
         <BottomTabBar activeTab={activeTab} onTabPress={setActiveTab} />
       </View>
 
-      <AddMoneyModal visible={showAddMoney} onClose={() => setShowAddMoney(false)} />
+      <AddMoneyModal
+        visible={showAddMoney}
+        onClose={() => setShowAddMoney(false)}
+        onSelectCard={() => onNavigate?.('cardPayment')}
+        onSelectBankTransfer={() => onNavigate?.('bankTransfer')}
+      />
     </View>
   );
 }

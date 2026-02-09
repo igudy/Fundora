@@ -37,7 +37,6 @@ export function DueItem({ initials, title, date, amount, members = [], onPress }
         {members.length > 0 && (
           <View className="mt-1">
             <AvatarGroup avatars={members} maxDisplay={3} size={20} />
-            jj
           </View>
         )}
       </View>

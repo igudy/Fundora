@@ -1,5 +1,6 @@
 export * from './AddMoneyModal';
 export * from './Avatar';
+export * from './Card3DView';
 export * from './AvatarGroup';
 export * from './AvatarImage';
 export * from './BigLogo';

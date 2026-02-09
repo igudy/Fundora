@@ -7,6 +7,8 @@ import { BankTransferIcon, CardIcon } from './icons';
 interface AddMoneyModalProps {
   visible: boolean;
   onClose: () => void;
+  onSelectCard?: () => void;
+  onSelectBankTransfer?: () => void;
 }
 
 function CloseIcon({ size = 24 }: { size?: number }) {
@@ -23,7 +25,7 @@ function CloseIcon({ size = 24 }: { size?: number }) {
   );
 }
 
-export function AddMoneyModal({ visible, onClose }: AddMoneyModalProps) {
+export function AddMoneyModal({ visible, onClose, onSelectCard, onSelectBankTransfer }: AddMoneyModalProps) {
   const insets = useSafeAreaInsets();
 
   return (
@@ -62,7 +64,10 @@ export function AddMoneyModal({ visible, onClose }: AddMoneyModalProps) {
           {/* Card Option */}
           <Pressable
             className="mt-8 items-center rounded-2xl bg-gray-50 py-8"
-            onPress={() => {}}>
+            onPress={() => {
+              onClose();
+              onSelectCard?.();
+            }}>
             <CardIcon size={61} />
             <Text className="mt-4 font-jakarta-semibold text-base text-[#23262F]">Card</Text>
             <Text className="mt-1 font-jakarta text-sm text-gray-500">
@@ -73,7 +78,10 @@ export function AddMoneyModal({ visible, onClose }: AddMoneyModalProps) {
           {/* Bank Transfer Option */}
           <Pressable
             className="mt-4 items-center rounded-2xl bg-gray-50 py-8"
-            onPress={() => {}}>
+            onPress={() => {
+              onClose();
+              onSelectBankTransfer?.();
+            }}>
             <BankTransferIcon size={61} />
             <Text className="mt-4 font-jakarta-semibold text-base text-[#23262F]">
               Bank Transfer
