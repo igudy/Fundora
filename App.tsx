@@ -143,7 +143,11 @@ export default function App() {
       <View className="flex-1">
         {renderScreen()}
         <StatusBar
-          style={currentScreen === 'welcome' || currentScreen === 'home' || currentScreen === 'profile' ? 'light' : 'dark'}
+          style={
+            currentScreen === 'welcome' || currentScreen === 'home' || currentScreen === 'profile'
+              ? 'light'
+              : 'dark'
+          }
         />
       </View>
     </SafeAreaProvider>
